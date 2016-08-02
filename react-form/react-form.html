@@ -7,8 +7,67 @@
     <script src="../build/react-dom.js"></script>
     <script src="../build/browser.min.js"></script>
 </head>
-<script ty></script>
+<style>
+    .right {
+        float: left;
+    }
+</style>
 <body>
+<div id="example"></div>
+<script type="text/babel">
 
+    const Middle = React.createClass({
+
+        render(){
+            var Text = function (text) {
+                if (text === 'text') {
+                    return <div>
+                        <input type="input"/>
+                        <input type="button" value="X"/><br/>
+                    </div>
+                } else {
+                    return <div>
+                        <input type="date"/>
+                        <input type="button" value="X"/><br/>
+                    </div>
+                }
+            };
+            return <div>{this.props.count.map(Text)}</div>
+        }
+    });
+
+
+    const App = React.createClass({
+        getInitialState(){
+            return {count: []}
+        },
+        handelClickedText(e){
+            this.state.count.push('text');
+            this.setState({count: this.state.count})
+        },
+        handelClickedDate(e){
+            this.state.count.push('date');
+            this.setState({count: this.state.count})
+        },
+        deleted(index){
+            this.state.count.split(index,1);
+            this.setState({count:this.state.count})
+        },
+        render(){
+            return (
+                    <div className="right">
+                        <form>
+                            <input type="button" onClick={this.handelClickedText} value="文本框"></input>
+                            <input type="button" onClick={this.handelClickedDate} value="日期框"></input>
+                        </form>
+                        <Middle count={this.state.count} />
+                    </div>
+            )
+        }
+    })
+    ReactDOM.render(
+            <App/>
+            , document.getElementById('example'));
+</script>
 </body>
 </html>
