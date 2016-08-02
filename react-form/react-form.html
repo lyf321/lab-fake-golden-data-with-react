@@ -17,29 +17,39 @@
 <script type="text/babel">
 
     const Middle = React.createClass({
-
         render(){
-            var Text = function (text) {
-                if (text === 'text') {
-                    return <div>
-                        <input type="input"/>
-                        <input type="button" value="X"/><br/>
+            return (<div>
+                        {this.props.count.map((Text, Index) => {
+                            return <Item index={Index} text={Text}
+                                         deleted={this.props.deleted.bind(this)}/>
+                        })}
                     </div>
-                } else {
-                    return <div>
-                        <input type="date"/>
-                        <input type="button" value="X"/><br/>
-                    </div>
-                }
-            };
-            return <div>{this.props.count.map(Text)}</div>
+            )
         }
     });
 
+    const Item = React.createClass({
+        handelDelete(){
+            this.props.deleted(this.props.index);
+        },
+        render(){
+            if (this.props.text === 'text') {
+                return <div>
+                    <input type="input"/>
+                    <input type="button" onClick={this.handelDelete.bind(this)} value="X"/><br/>
+                </div>
+            } else {
+                return <div>
+                    <input type="date"/>
+                    <input type="button" onClick={this.handelDelete.bind(this)} value="X"/><br/>
+                </div>
+            }
+        }
+    });
 
     const App = React.createClass({
         getInitialState(){
-            return {count: []}
+            return {count: [], states: true}
         },
         handelClickedText(e){
             this.state.count.push('text');
@@ -50,21 +60,24 @@
             this.setState({count: this.state.count})
         },
         deleted(index){
-            this.state.count.split(index,1);
-            this.setState({count:this.state.count})
+            this.state.count.splice(index, 1);
+            this.setState({count: this.state.count})
+        },
+        changeState(){
+            this.setState({states: !this.state.states})
         },
         render(){
-            return (
-                    <div className="right">
-                        <form>
-                            <input type="button" onClick={this.handelClickedText} value="文本框"></input>
-                            <input type="button" onClick={this.handelClickedDate} value="日期框"></input>
-                        </form>
-                        <Middle count={this.state.count} />
-                    </div>
-            )
+            if (this.state.states === true) {
+
+               return <div className="right">
+                    <input type="button" onClick={this.changeState.bind(this)} value="预览"/>
+                    <input type="button" onClick={this.handelClickedText.bind(this)} value="文本框"></input>
+                    <input type="button" onClick={this.handelClickedDate.bind(this)} value="日期框"></input>
+                    <Middle count={this.state.count} deleted={this.deleted.bind(this)}/>
+                </div>
+            }
         }
-    })
+    });
     ReactDOM.render(
             <App/>
             , document.getElementById('example'));
