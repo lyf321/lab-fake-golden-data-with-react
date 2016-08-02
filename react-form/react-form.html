@@ -6,22 +6,36 @@
     <script src="../build/react.js"></script>
     <script src="../build/react-dom.js"></script>
     <script src="../build/browser.min.js"></script>
+    <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 </head>
 <style>
     .right {
         float: left;
     }
+    .container{
+        float: left;
+        height: 50%;
+        margin-bottom: -120px;
+    }
+
+    .input{
+       
+    }
 </style>
 <body>
-<div id="example"></div>
+<div class="container">
+    <div id="example"></div>
+</div>
 <script type="text/babel">
 
     const Middle = React.createClass({
         render(){
             return (<div>
                         {this.props.count.map((Text, Index) => {
-                            return <Item index={Index} text={Text}
-                                         deleted={this.props.deleted.bind(this)}/>
+                            if (this.props.clicked === true) {
+                                return <Item index={Index} text={Text}
+                                             deleted={this.props.deleted.bind(this)}/>
+                            }
                         })}
                     </div>
             )
@@ -34,12 +48,12 @@
         },
         render(){
             if (this.props.text === 'text') {
-                return <div>
+                return <div className="input">
                     <input type="input"/>
                     <input type="button" onClick={this.handelDelete.bind(this)} value="X"/><br/>
                 </div>
             } else {
-                return <div>
+                return <div  className="input">
                     <input type="date"/>
                     <input type="button" onClick={this.handelDelete.bind(this)} value="X"/><br/>
                 </div>
@@ -47,9 +61,27 @@
         }
     });
 
+    const Submit = React.createClass({
+        render(){
+            return (
+                    this.props.count.map((Text) => {
+                        if (Text === 'text') {
+                            return <div>
+                                <input type="input"/><br/>
+                            </div>
+                        } else {
+                            return <div>
+                                <input type="date"/>
+                            </div>
+                        }
+                    })
+            )
+        }
+    })
+
     const App = React.createClass({
         getInitialState(){
-            return {count: [], states: true}
+            return {count: [], clicked: true}
         },
         handelClickedText(e){
             this.state.count.push('text');
@@ -64,20 +96,47 @@
             this.setState({count: this.state.count})
         },
         changeState(){
-            this.setState({states: !this.state.states})
+            this.setState({clicked: !this.state.clicked})
         },
-        render(){
-            if (this.state.states === true) {
+        display1(){
+            document.getElementById("test1").style.display = "none";
+            document.getElementById("test2").style.display = "none";
+            document.getElementById("test3").style.display = "none";
+            document.getElementById("test4").style.display = "";
+            document.getElementById("test5").style.display = "";
 
-               return <div className="right">
-                    <input type="button" onClick={this.changeState.bind(this)} value="预览"/>
-                    <input type="button" onClick={this.handelClickedText.bind(this)} value="文本框"></input>
-                    <input type="button" onClick={this.handelClickedDate.bind(this)} value="日期框"></input>
-                    <Middle count={this.state.count} deleted={this.deleted.bind(this)}/>
+        },
+        display2(){
+            document.getElementById("test1").style.display = "";
+            document.getElementById("test2").style.display = "";
+            document.getElementById("test3").style.display = "";
+            document.getElementById("test4").style.display = "none";
+            document.getElementById("test5").style.display = "none";
+
+        },
+
+        render(){
+            if (this.state.clicked === true) {
+                return <div className="right">
+                    <input type="button" id="test1" onClick={this.changeState} onkeydown={this.display1} value="预览"
+                           style={{display: ''}}/>
+                    <input type="button" id="test2" onClick={this.handelClickedText.bind(this)} value="文本框"
+                           style={{display: ''}}/>
+                    <input type="button" id="test3" onClick={this.handelClickedDate.bind(this)} value="日期框"
+                           style={{display: ''}}/>
+                    <Middle count={this.state.count} deleted={this.deleted.bind(this)} clicked={this.state.clicked}/>
+                </div>
+            } else {
+                return <div>
+                    <input type="button" id="test4" onClick={this.changeState} onkeydown={this.display2} value="编辑"
+                           onKeyUp={this.display}/><br/>
+
+                    <input type="button" id="test5" value="提交"/>
                 </div>
             }
         }
     });
+
     ReactDOM.render(
             <App/>
             , document.getElementById('example'));
