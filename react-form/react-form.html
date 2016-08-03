@@ -7,21 +7,19 @@
     <script src="../build/react-dom.js"></script>
     <script src="../build/browser.min.js"></script>
     <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .right {
+            margin-left: 1000px;
+        }
+        .center{
+            width: auto;
+            display: table;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
-<style>
-    .right {
-        float: left;
-    }
-    .container{
-        float: left;
-        height: 50%;
-        margin-bottom: -120px;
-    }
 
-    .input{
-
-    }
-</style>
 <body>
 <div class="container">
     <div id="example"></div>
@@ -48,12 +46,12 @@
         },
         render(){
             if (this.props.text === 'text') {
-                return <div className="input">
+                return <div className="center">
                     <br/><input type="input"/>
                     <input type="button" onClick={this.handelDelete.bind(this)} value="X"/><br/>
                 </div>
             } else {
-                return <div  className="input">
+                return <div  className="center">
                     <br/><input type="date"/>
                     <input type="button" onClick={this.handelDelete.bind(this)} value="X"/><br/>
                 </div>
@@ -61,23 +59,6 @@
         }
     });
 
-    const Submit = React.createClass({
-        render(){
-            return (
-                    this.props.count.map((Text) => {
-                        if (Text === 'text') {
-                            return <div>
-                                <input type="input"/><br/>
-                            </div>
-                        } else {
-                            return <div>
-                                <input type="date"/>
-                            </div>
-                        }
-                    })
-            )
-        }
-    })
 
     const App = React.createClass({
         getInitialState(){
@@ -117,34 +98,34 @@
 
         render(){
             if (this.state.clicked === true) {
-                return <div className="right">
-                    <input type="button" id="test1" onClick={this.changeState} onkeydown={this.display1} value="预览"
+                return <div className="">
+                    <input type="button" className="center" onClick={this.changeState} onKeyDown={this.display1} value="预览"
                            style={{display: ''}}/>
-                    <input type="button" id="test2" onClick={this.handelClickedText.bind(this)} value="文本框"
-                           style={{display: ''}}/>
-                    <input type="button" id="test3" onClick={this.handelClickedDate.bind(this)} value="日期框"
+                    <input type="button" className="right" onClick={this.handelClickedText.bind(this)} value="文本框"
+                           style={{display: ''}}/><br/>
+                    <input type="button" className="right" onClick={this.handelClickedDate.bind(this)} value="日期框"
                            style={{display: ''}}/>
                     <Middle count={this.state.count} deleted={this.deleted.bind(this)} clicked={this.state.clicked}/>
                 </div>
             } else {
                 return <div>
-                    <input type="button" id="test4" onClick={this.changeState} onkeydown={this.display2} value="编辑"
+                    <input type="button" className="center" onClick={this.changeState} onKeyDown={this.display2} value="编辑"
                            onKeyUp={this.display}/><br/>
                     <div className="groove center">
                         {this.state.count.map(tag => {
                             if (tag === 'text') {
-                                return <div>
-                                    <br/><input className="form-control center" type="input"></input><br/>
+                                return <div className="center">
+                                    <br/><input className="center" type="input"></input><br/>
                                 </div>
                             } else {
-                                return <div>
-                                    <br/>  <input className="form-control center" type="date"/><br/>
+                                return <div className="center">
+                                    <br/>  <input className="center" type="date"/><br/>
                                 </div>
 
                             }
                         })}
                     </div>
-                    <input type="button" id="test5" value="提交"/>
+                    <input type="button" className="center" value="提交"/>
                 </div>
             }
         }
